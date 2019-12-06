@@ -12,6 +12,7 @@
   "dependencies": {
     "@azure/keyvault-secrets": "^4.0.0",
     "@azure/ms-rest-nodeauth": "^2.0.5",
+    "@types/q": "^1.5.2",
     "azure-pipelines-task-lib": "^2.9.3"
   }
 }
