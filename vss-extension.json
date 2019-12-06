@@ -9,7 +9,7 @@
           "id": "Microsoft.VisualStudio.Services"
       }
   ],    
-  "description": "Azure KeyVault extensions=",
+  "description": "A set of Azure DevOps tasks to help with Azure KeyVault secrets creation and/or update.",
   "tags": [
     "Build",
     "Release",
