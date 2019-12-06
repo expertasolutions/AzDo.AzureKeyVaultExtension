@@ -1,8 +1,8 @@
 {
   "id": "17413b0d-72fc-48b8-ac69-18fc03cca895",
     "name": "CreateUpdateMultipleAzureKeyVaultSecrets",
-    "friendlyName": "CreateUpdate Multiple Azure KeyVault secrets",
-    "description": "Create/Update Azure KeyVault secrets",
+    "friendlyName": "Upload Azure KeyVault secrets from file",
+    "description": "Upload Azure KeyVault secrets from file",
     "helpMarkDown": "",
     "preview": true,
     "category": "Utility",
@@ -12,7 +12,7 @@
         "Minor": 0,
         "Patch": 0
     },
-    "instanceNameFormat": "Create/Update Multiple Azure KeyVault secrets",
+    "instanceNameFormat": "Upload multiple Azure KeyVault secrets",
     "groups": [],
     "inputs": [
         {
