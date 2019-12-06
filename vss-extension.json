@@ -1,0 +1,83 @@
+{
+  "manifestVersion": 1,
+  "id": "ExpertaAzureKeyVaultExtension",
+  "name": "Experta Azure KeyVault Extension",
+  "version": "0.0.0",
+  "publisher": "expertaPreview",
+  "targets": [
+      {
+          "id": "Microsoft.VisualStudio.Services"
+      }
+  ],    
+  "description": "Azure KeyVault extensions=",
+  "tags": [
+    "Build",
+    "Release",
+    "Azure Pipelines",
+    "macOS",
+    "linux",
+    "windows",
+    "AzureDevOps",
+    "DevOps",
+    "Azure",
+    "KeyVault"
+  ],
+  "links":{
+    "support": { 
+        "uri": "https://github.com/expertasolutions/AzureKeyVaultExtension/issues"
+    }
+  },
+  "repository": {
+    "type" : "git",
+    "uri" : "https://github.com/expertasolutions/AzureKeyVaultExtension"
+  },
+  "categories": [
+      "Azure Pipelines"
+  ],
+  "icons": {
+      "default": "azureKeyVaultExtension.png"
+  },
+  "content": {
+    "details": { "path": "README.md" },
+    "license": { "path": "license" }
+  },
+  "badges":[
+    {
+      "href":"https://dev.azure.com/experta/Community/_build?definitionId=226&_a=summary",
+      "uri": "https://dev.azure.com/experta/Community/_apis/build/status/CD-GitHub-AzureKeyVaultExtension?branchName=master" ,
+      "description":"master branch build"
+    },
+    {
+      "href": "https://dev.azure.com/experta/Community/_release?_a=releases&definitionId=5",
+      "uri": "https://vsrm.dev.azure.com/experta/_apis/public/Release/badge/97814487-b723-4a7d-a446-f599ab91ea2f/5/15",
+      "description": "Public"
+    }
+  ],
+  "files": [
+      { "path": "ManageKeyVaultSecrets" },
+      { "path": "ManageKeyVaultSingleSecret"},
+      { "path": "_screenShots", "addressable": true }
+  ],
+  "contributions": [
+      {
+        "id": "managekeyvaultsecrets-build-release-task",
+        "type": "ms.vss-distributed-task.task",
+        "targets": [
+            "ms.vss-distributed-task.tasks"
+        ],
+        "properties": {
+            "name": "manageKeyVaultSecrets"
+        }
+      },
+      {
+        "id": "managekeyvaultsinglesecret-build-release-task",
+        "type": "ms.vss-distributed-task.task",
+        "targets": [
+            "ms.vss-distributed-task.tasks"
+        ],
+        "properties": {
+            "name": "manageKeyVaultSingleSecret"
+        }
+      }
+  ]
+}
