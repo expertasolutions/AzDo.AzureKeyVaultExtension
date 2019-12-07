@@ -6,7 +6,7 @@ A set of Azure DevOps tasks to help with Azure KeyVault secrets creation and/or 
 # Tasks
 
 ## ManageKeyVaultSecrets
-![ManageKeyVaultSecrets](_screenShots/importKeyVaultSecrets-v0.png)
+![ManageKeyVaultSecrets](_screenShots/ImportKeyVaultSecrets-v0.png)
 #### Secrets file path (expected file format content)
 ```json
 [
