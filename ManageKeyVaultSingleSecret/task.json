@@ -4,7 +4,7 @@
     "friendlyName": "Create/Update KeyVault Secret",
     "description": "Create/Update Azure KeyVault secret",
     "helpMarkDown": "",
-    "preview": true,
+    "preview": false,
     "category": "Utility",
     "author": "Solutions Experta Inc.",
     "version": {

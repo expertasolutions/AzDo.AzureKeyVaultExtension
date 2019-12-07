@@ -4,7 +4,7 @@
     "friendlyName": "Upload Azure KeyVault secrets from file",
     "description": "Upload Azure KeyVault secrets from file",
     "helpMarkDown": "",
-    "preview": true,
+    "preview": false,
     "category": "Utility",
     "author": "Solutions Experta Inc.",
     "version": {
