@@ -1,7 +1,7 @@
 {
   "manifestVersion": 1,
   "id": "ExpertaAzureKeyVaultExtension",
-  "name": "Experta Azure KeyVault Extension",
+  "name": "Azure KeyVault Extension",
   "version": "0.0.0",
   "publisher": "expertaPreview",
   "targets": [
