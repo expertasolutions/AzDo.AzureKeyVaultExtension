@@ -20,7 +20,8 @@
     "AzureDevOps",
     "DevOps",
     "Azure",
-    "KeyVault"
+    "KeyVault",
+    "secret"
   ],
   "links":{
     "support": { 
