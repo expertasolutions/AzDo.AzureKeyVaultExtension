@@ -1,4 +1,4 @@
-import * as tl from 'azure-pipelines-task-lib/task';
+import * as tl from 'azure-pipelines-task-lib';
 let fs = require('fs');
 import * as msRestNodeAuth from '@azure/ms-rest-nodeauth';
 import * as msKeyVault from '@azure/keyvault-secrets';
