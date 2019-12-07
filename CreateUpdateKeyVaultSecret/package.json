@@ -1,0 +1,18 @@
+{
+  "name": "CreateUpdateKeyVaultSecret",
+  "version": "1.0.0",
+  "description": "",
+  "main": "uploadSecret.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "publishExt": "npm install && tsc -project tsconfig.json"
+  },
+  "author": "Solutions Experta Inc.",
+  "license": "MIT",
+  "dependencies": {
+    "@azure/keyvault-secrets": "^4.0.0",
+    "@azure/ms-rest-nodeauth": "^2.0.5",
+    "@types/q": "^1.5.2",
+    "azure-pipelines-task-lib": "^2.9.3"
+  }
+}
