@@ -54,29 +54,29 @@
     }
   ],
   "files": [
-      { "path": "ManageKeyVaultSecrets" },
-      { "path": "ManageKeyVaultSingleSecret"},
+      { "path": "UploadMultipleAzureKeyVaultSecrets" },
+      { "path": "CreateUpdateKeyVaultSecret"},
       { "path": "_screenShots", "addressable": true }
   ],
   "contributions": [
       {
-        "id": "managekeyvaultsecrets-build-release-task",
+        "id": "UploadMultipleAzureKeyVaultSecrets-build-release-task",
         "type": "ms.vss-distributed-task.task",
         "targets": [
             "ms.vss-distributed-task.tasks"
         ],
         "properties": {
-            "name": "manageKeyVaultSecrets"
+            "name": "UploadMultipleAzureKeyVaultSecrets"
         }
       },
       {
-        "id": "managekeyvaultsinglesecret-build-release-task",
+        "id": "CreateUpdateKeyVaultSecret-build-release-task",
         "type": "ms.vss-distributed-task.task",
         "targets": [
             "ms.vss-distributed-task.tasks"
         ],
         "properties": {
-            "name": "manageKeyVaultSingleSecret"
+            "name": "CreateUpdateKeyVaultSecret"
         }
       }
   ]

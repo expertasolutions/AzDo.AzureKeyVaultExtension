@@ -1,5 +1,5 @@
 {
-  "name": "ManageKeyVaultSecrets",
+  "name": "CreateUpdateKeyVaultSecret",
   "version": "1.0.0",
   "description": "",
   "main": "uploadSecret.js",

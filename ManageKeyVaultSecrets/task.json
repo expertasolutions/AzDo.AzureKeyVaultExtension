@@ -1,6 +1,6 @@
 {
   "id": "17413b0d-72fc-48b8-ac69-18fc03cca895",
-    "name": "CreateUpdateMultipleAzureKeyVaultSecrets",
+    "name": "UploadMultipleAzureKeyVaultSecrets",
     "friendlyName": "Upload Azure KeyVault secrets from file",
     "description": "Upload Azure KeyVault secrets from file",
     "helpMarkDown": "",

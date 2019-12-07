@@ -4,8 +4,8 @@ A set of Azure DevOps tasks to help with Azure KeyVault secrets creation and/or 
 ![BuildStatus](https://dev.azure.com/experta/Community/_apis/build/status/CD-GitHub-AzureKeyVaultExtension?branchName=master)
 
 # Tasks
-## ManageKeyVaultSecrets
-![ManageKeyVaultSecrets](_screenShots/ImportKeyVaultSecrets-v0.png)
+## UploadMultipleAzureKeyVaultSecrets
+![ManageKeyVaultSecrets](_screenShots/UploadMultipleAzureKeyVaultSecrets-v0.png)
 #### Secrets file path (expected file format content)
 ```json
 [
@@ -22,7 +22,7 @@ A set of Azure DevOps tasks to help with Azure KeyVault secrets creation and/or 
 #### Important
 *** Ensure that your subscription service principal have proper access policies rights on your Azure Key Vault ***
 
-## ManageKeyVaultSingleSecret
-![ManageAzureKeyVaultSingleSecret](_screenShots/ManageKeyVaultSingleSecret-v0.png)
+## CreateUpdateKeyVaultSecret
+![ManageAzureKeyVaultSingleSecret](_screenShots/CreateUpdateKeyVaultSecret-v0.png)
 #### Important
 *** Ensure that your subscription service principal have proper access policies rights on your Azure Key Vault ***
