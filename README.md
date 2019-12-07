@@ -6,7 +6,7 @@ A set of Azure DevOps tasks to help with Azure KeyVault secrets creation and/or 
 # Tasks
 
 ## ManageKeyVaultSecrets
-![ManageKeyVaultSecrets](_screenShots/manageKeyVaultSecrets_v2-preview.png)
+![ManageKeyVaultSecrets](_screenShots/importKeyVaultSecrets-v0.png)
 #### Secrets file path (expected file format content)
 ```json
 [
@@ -24,6 +24,6 @@ A set of Azure DevOps tasks to help with Azure KeyVault secrets creation and/or 
 *** Ensure that your subscription service principal have proper access policies rights on your Azure Key Vault ***
 
 ## ManageKeyVaultSingleSecret
-![ManageAzureKeyVaultSingleSecret](_screenShots/ManageAzureKeyVaultSingleSecret_v4-preview.png)
+![ManageAzureKeyVaultSingleSecret](_screenShots/ManageKeyVaultSingleSecret-v0.png)
 #### Important
 *** Ensure that your subscription service principal have proper access policies rights on your Azure Key Vault ***
