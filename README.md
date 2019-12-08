@@ -1,5 +1,5 @@
 # Azure KeyVault Extension
-A set of Azure DevOps tasks to help with Azure KeyVault secrets creation and/or update.
+A set of Azure DevOps tasks to help with Azure KeyVault secrets creation and/or update. This extension is multiplatform compatible.
 
 ![BuildStatus](https://dev.azure.com/experta/Community/_apis/build/status/CD-GitHub-AzureKeyVaultExtension?branchName=master)
 
