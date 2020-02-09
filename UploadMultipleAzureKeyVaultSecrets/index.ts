@@ -36,16 +36,20 @@ async function run() {
       if(err){
         throw new Error('File not exists');
       } else {
-        let rawdata = fs.readFileSync(secretsFilePath);
-        let secretsContent = JSON.parse(rawdata);
+        try {
+          let rawdata = fs.readFileSync(secretsFilePath);
+          let secretsContent = JSON.parse(rawdata);
 
-        const creds = await LoginToAzure(servicePrincipalId, servicePrincipalKey, tenantId);
-        const keyvaultCreds = <TokenCredential> <unknown>(new msRestNodeAuth.ApplicationTokenCredentials(creds.clientId, creds.domain, creds.secret, 'https://vault.azure.net'));
-        const keyvaultClient = new msKeyVault.SecretClient(url, keyvaultCreds);
-        for(var s=0;s<secretsContent.length;s++){
-          let secret = secretsContent[s];
-          let secretResult = await keyvaultClient.setSecret(secret.secret, secret.value);
-          console.log(secretResult.name + " set in KeyVault");
+          const creds = await LoginToAzure(servicePrincipalId, servicePrincipalKey, tenantId);
+          const keyvaultCreds = <TokenCredential> <unknown>(new msRestNodeAuth.ApplicationTokenCredentials(creds.clientId, creds.domain, creds.secret, 'https://vault.azure.net'));
+          const keyvaultClient = new msKeyVault.SecretClient(url, keyvaultCreds);
+          for(var s=0;s<secretsContent.length;s++){
+            let secret = secretsContent[s];
+            let secretResult = await keyvaultClient.setSecret(secret.secret, secret.value);
+            console.log(secretResult.name + " set in KeyVault");
+          }
+        } catch (err) {
+          tl.setResult(tl.TaskResult.Failed, err.message || 'run() failed');
         }
       }
     });
