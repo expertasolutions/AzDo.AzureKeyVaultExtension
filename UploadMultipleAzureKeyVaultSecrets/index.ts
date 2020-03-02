@@ -34,7 +34,8 @@ async function run() {
 
     fs.access(secretsFilePath, fs.F_OK, async (err:any) => {
       if(err){
-        throw new Error('File not exists');
+        throw new Error('File not found');
+        tl.setResult(tl.TaskResult.Failed, 'File not found' || 'run() failed');
       } else {
         try {
           let rawdata = fs.readFileSync(secretsFilePath);
