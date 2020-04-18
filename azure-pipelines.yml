@@ -1,8 +1,3 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 name: AzureKeyVaultExtension-v0.$(date:yy)$(DayOfYear).$(rev:r)-$(Build.SourceBranchName)
 trigger:
 - master
@@ -11,8 +6,6 @@ trigger:
 pool:
   vmImage: macOS-latest
   demands: npm
-
-#Your build pipeline references an undefined variable named ‘versionExtractor.fullVersion’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
 
 steps:
 - task: VersionExtractor@4
@@ -58,7 +51,9 @@ steps:
   displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
   inputs:
     SourceFolder: '$(Build.SourcesDirectory)'
-    Contents: '*.vsix'
+    Contents: |
+      *.vsix
+      CurrentReleaseNotes.md
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
 - task: PublishBuildArtifacts@1
