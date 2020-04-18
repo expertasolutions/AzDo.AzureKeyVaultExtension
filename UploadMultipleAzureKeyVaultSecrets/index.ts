@@ -42,15 +42,18 @@ async function run() {
           let secretsContent = JSON.parse(rawdata);
 
           const creds = await LoginToAzure(servicePrincipalId, servicePrincipalKey, tenantId);
+          console.log("LoginToAzure");
           const keyvaultCreds = <TokenCredential> <unknown>(new msRestNodeAuth.ApplicationTokenCredentials(creds.clientId, creds.domain, creds.secret, 'https://vault.azure.net'));
+          console.log("after keyvaultCreds");
           const keyvaultClient = new msKeyVault.SecretClient(url, keyvaultCreds);
           for(var s=0;s<secretsContent.length;s++){
             let secret = secretsContent[s];
             let secretResult = await keyvaultClient.setSecret(secret.secret, secret.value);
-            console.log(JSON.stringify(secretResult));
+            console.log("secretResult: " + JSON.stringify(secretResult));
             console.log(secretResult.name + " set in KeyVault");
           }
         } catch (err) {
+          console.log("error");
           tl.setResult(tl.TaskResult.Failed, err.message || 'run() failed');
         }
       }
