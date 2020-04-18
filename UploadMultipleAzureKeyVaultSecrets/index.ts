@@ -11,7 +11,6 @@ async function LoginToAzure(servicePrincipalId:string, servicePrincipalKey:strin
 async function run() {
   try {
     let azureSubscriptionEndpoint = tl.getInput("azureSubscriptionEndpoint", true) as string;
-      
     let subcriptionId = tl.getEndpointDataParameter(azureSubscriptionEndpoint, "subscriptionId", false) as string;
     let servicePrincipalId = tl.getEndpointAuthorizationParameter(azureSubscriptionEndpoint, "serviceprincipalid", false) as string;
     let servicePrincipalKey = tl.getEndpointAuthorizationParameter(azureSubscriptionEndpoint, "serviceprincipalkey", false) as string;
@@ -41,18 +40,22 @@ async function run() {
           let rawdata = fs.readFileSync(secretsFilePath);
           let secretsContent = JSON.parse(rawdata);
 
+          let getOptions = {
+            hostname: url,
+            port: 443,
+            method: 'GET'
+          };
+
+          let httpResponse = await httpsGetRequest(getOptions);
+          console.log(JSON.stringify(httpResponse));
+          console.log("Url: " + url + " - StatusCode: " + httpResponse.statusCode);
+
           const creds = await LoginToAzure(servicePrincipalId, servicePrincipalKey, tenantId);
-          console.log("LoginToAzure");
           const keyvaultCreds = <TokenCredential> <unknown>(new msRestNodeAuth.ApplicationTokenCredentials(creds.clientId, creds.domain, creds.secret, 'https://vault.azure.net'));
-          console.log("after keyvaultCreds");
           const keyvaultClient = new msKeyVault.SecretClient(url, keyvaultCreds);
-          console.log("afeter keyvaultClient");
-          console.log(JSON.stringify(keyvaultClient));
           for(var s=0;s<secretsContent.length;s++){
             let secret = secretsContent[s];
             let secretResult = await keyvaultClient.setSecret(secret.secret, secret.value);
-            console.log("secretResult: " + JSON.stringify(secretResult));
-            console.log(secretResult.name + " set in KeyVault");
           }
         } catch (err) {
           console.log("error");
