@@ -82,7 +82,7 @@ async function run() {
           for(var s=0;s<secretsContent.length;s++){
             let secret = secretsContent[s];
             let secretResult = await keyvaultClient.setSecret(secret.secret, secret.value);
-            console.log(JSON.stringify(secretResult);
+            console.log(JSON.stringify(secretResult));
             console.log("Secret: " + secret.secret + " Created/Updated");
           }
         } catch (err) {
