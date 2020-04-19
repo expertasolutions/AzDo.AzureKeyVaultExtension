@@ -65,7 +65,7 @@ async function run() {
           let secretsContent = JSON.parse(rawdata);
 
           let getOptions = {
-            hostname: url,
+            hostname: keyVault + '.vault.azure.net',
             port: 443,
             method: 'GET'
           };
