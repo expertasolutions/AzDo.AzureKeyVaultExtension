@@ -11,7 +11,6 @@ async function LoginToAzure(servicePrincipalId:string, servicePrincipalKey:strin
 async function run() {
   try {
     let azureSubscriptionEndpoint = tl.getInput("azureSubscriptionEndpoint", true) as string;
-      
     let subcriptionId = tl.getEndpointDataParameter(azureSubscriptionEndpoint, "subscriptionId", false) as string;
     let servicePrincipalId = tl.getEndpointAuthorizationParameter(azureSubscriptionEndpoint, "serviceprincipalid", false) as string;
     let servicePrincipalKey = tl.getEndpointAuthorizationParameter(azureSubscriptionEndpoint, "serviceprincipalkey", false) as string;
@@ -43,11 +42,13 @@ async function run() {
 
           const creds = await LoginToAzure(servicePrincipalId, servicePrincipalKey, tenantId);
           const keyvaultCreds = <TokenCredential> <unknown>(new msRestNodeAuth.ApplicationTokenCredentials(creds.clientId, creds.domain, creds.secret, 'https://vault.azure.net'));
+          console.log(secretsContent.length);
           const keyvaultClient = new msKeyVault.SecretClient(url, keyvaultCreds);
+          console.log("after keyvaultclient");
           for(var s=0;s<secretsContent.length;s++){
             let secret = secretsContent[s];
             let secretResult = await keyvaultClient.setSecret(secret.secret, secret.value);
-            console.log(secretResult.name + " set in KeyVault");
+            console.log("Secret: " + secretResult.name + " Created/Updated");
           }
         } catch (err) {
           tl.setResult(tl.TaskResult.Failed, err.message || 'run() failed');
