@@ -9,7 +9,7 @@ async function LoginToAzure(servicePrincipalId:string, servicePrincipalKey:strin
   return await msRestNodeAuth.loginWithServicePrincipalSecret(servicePrincipalId, servicePrincipalKey, tenantId );
 };
 
-function httpsGetRequest(httpsOptions:any) {
+function validateUrlEndpoint(httpsOptions:any) {
   return new Promise((resolve, reject) => {
     const req = https.request(httpsOptions, (response) => {
       let responseStatusCode = response.statusCode;
@@ -68,7 +68,7 @@ async function run() {
             method: 'GET'
           };
 
-          await httpsGetRequest(getOptions);
+          await validateUrlEndpoint(getOptions);
 
           const creds = await LoginToAzure(servicePrincipalId, servicePrincipalKey, tenantId);
           const keyvaultCreds = <TokenCredential> <unknown>(new msRestNodeAuth.ApplicationTokenCredentials(creds.clientId, creds.domain, creds.secret, 'https://vault.azure.net'));
