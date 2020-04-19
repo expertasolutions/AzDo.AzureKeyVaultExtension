@@ -68,8 +68,12 @@ async function run() {
             method: 'GET'
           };
 
-          await validateUrlEndpoint(getOptions);
-
+          try {
+            await validateUrlEndpoint(getOptions);
+          } catch (err) {
+            console.log(err);
+          }
+          
           const creds = await LoginToAzure(servicePrincipalId, servicePrincipalKey, tenantId);
           const keyvaultCreds = <TokenCredential> <unknown>(new msRestNodeAuth.ApplicationTokenCredentials(creds.clientId, creds.domain, creds.secret, 'https://vault.azure.net'));
           const keyvaultClient = new msKeyVault.SecretClient(url, keyvaultCreds);
