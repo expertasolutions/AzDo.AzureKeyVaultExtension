@@ -20,7 +20,9 @@ function httpsGetRequest(httpsOptions:any) {
         resolve(responseStatusCode);
       });
       response.on('error', err => {
-        responseStatusCode = 0;
+        let errMsg = httpsOptions.hostname + " is not accessible or not exists";
+        console.log(errMsg);
+        responseStatusCode = 404;
         reject(responseStatusCode);
       });
     });
@@ -66,11 +68,7 @@ async function run() {
             method: 'GET'
           };
 
-          let httpResponse = await httpsGetRequest(getOptions);
-
-          if(httpResponse === 0) {
-            console.log("httpResponse: " + httpResponse);
-          }
+          await httpsGetRequest(getOptions);
 
           const creds = await LoginToAzure(servicePrincipalId, servicePrincipalKey, tenantId);
           const keyvaultCreds = <TokenCredential> <unknown>(new msRestNodeAuth.ApplicationTokenCredentials(creds.clientId, creds.domain, creds.secret, 'https://vault.azure.net'));
@@ -81,7 +79,6 @@ async function run() {
             console.log("Secret: " + secretResult.name + " Created/Updated");
           }
         } catch (err) {
-          console.log("error");
           tl.setResult(tl.TaskResult.Failed, err.message || 'run() failed');
         }
       }
