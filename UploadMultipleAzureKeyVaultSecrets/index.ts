@@ -76,7 +76,7 @@ async function run() {
           for(var s=0;s<secretsContent.length;s++){
             let secret = secretsContent[s];
             let secretResult = await keyvaultClient.setSecret(secret.secret, secret.value);
-            console.log("Secret: " + secretResult.name + " Created/Updated");
+            console.log("Secret: " + secret.secret + " Created/Updated");
           }
         } catch (err) {
           tl.setResult(tl.TaskResult.Failed, err.message || 'run() failed');
