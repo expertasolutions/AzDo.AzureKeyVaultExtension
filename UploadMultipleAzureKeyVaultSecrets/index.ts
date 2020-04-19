@@ -72,7 +72,7 @@ async function run() {
 
           let httpResponse = await httpsGetRequest(getOptions);
           console.log(JSON.stringify(httpResponse));
-          console.log("Url: " + url + " - StatusCode: " + httpResponse.statusCode);
+          //console.log("Url: " + url + " - StatusCode: " + httpResponse.statusCode);
 
           const creds = await LoginToAzure(servicePrincipalId, servicePrincipalKey, tenantId);
           const keyvaultCreds = <TokenCredential> <unknown>(new msRestNodeAuth.ApplicationTokenCredentials(creds.clientId, creds.domain, creds.secret, 'https://vault.azure.net'));
