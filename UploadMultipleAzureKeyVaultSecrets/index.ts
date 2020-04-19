@@ -69,7 +69,7 @@ async function run() {
           };
 
           try {
-            await validateUrlEndpoint(getOptions);
+            //await validateUrlEndpoint(getOptions);
           } catch (err) {
             console.log(err);
           }
@@ -77,11 +77,9 @@ async function run() {
           const creds = await LoginToAzure(servicePrincipalId, servicePrincipalKey, tenantId);
           const keyvaultCreds = <TokenCredential> <unknown>(new msRestNodeAuth.ApplicationTokenCredentials(creds.clientId, creds.domain, creds.secret, 'https://vault.azure.net'));
           const keyvaultClient = new msKeyVault.SecretClient(url, keyvaultCreds);
-          console.log(secretsContent.length);
           for(var s=0;s<secretsContent.length;s++){
             let secret = secretsContent[s];
             let secretResult = await keyvaultClient.setSecret(secret.secret, secret.value);
-            console.log(secretResult);
             console.log("Secret: " + secret.secret + " Created/Updated");
           }
         } catch (err) {
