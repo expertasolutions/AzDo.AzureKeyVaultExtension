@@ -3,7 +3,6 @@ let fs = require('fs');
 import * as msRestNodeAuth from '@azure/ms-rest-nodeauth';
 import * as msKeyVault from '@azure/keyvault-secrets';
 import { TokenCredential } from '@azure/core-auth';
-import * as https from 'https';
 
 async function LoginToAzure(servicePrincipalId:string, servicePrincipalKey:string, tenantId:string) {
   return await msRestNodeAuth.loginWithServicePrincipalSecret(servicePrincipalId, servicePrincipalKey, tenantId );
