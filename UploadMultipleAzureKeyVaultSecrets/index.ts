@@ -9,27 +9,6 @@ async function LoginToAzure(servicePrincipalId:string, servicePrincipalKey:strin
   return await msRestNodeAuth.loginWithServicePrincipalSecret(servicePrincipalId, servicePrincipalKey, tenantId );
 };
 
-function validateUrlEndpoint(httpsOptions:any) {
-  return new Promise((resolve, reject) => {
-    const req = https.request(httpsOptions, (response) => {
-      let responseStatusCode = response.statusCode;
-      
-      console.log("ResponseStatusCode: " + response.statusCode);
-
-      response.on('end', () => {
-        resolve(responseStatusCode);
-      });
-      response.on('error', err => {
-        let errMsg = httpsOptions.hostname + " is not accessible or not exists";
-        console.log(errMsg);
-        responseStatusCode = 404;
-        reject(responseStatusCode);
-      });
-    });
-    req.end();
-  });  
-}
-
 async function run() {
   try {
     let azureSubscriptionEndpoint = tl.getInput("azureSubscriptionEndpoint", true) as string;
@@ -62,20 +41,6 @@ async function run() {
           let rawdata = fs.readFileSync(secretsFilePath);
           let secretsContent = JSON.parse(rawdata);
 
-          /*
-          let getOptions = {
-            hostname: keyVault + '.vault.azure.net',
-            port: 443,
-            method: 'GET'
-          };
-
-          try {
-            //await validateUrlEndpoint(getOptions);
-          } catch (err) {
-            console.log(err);
-          }
-          */
-
           const creds = await LoginToAzure(servicePrincipalId, servicePrincipalKey, tenantId);
           const keyvaultCreds = <TokenCredential> <unknown>(new msRestNodeAuth.ApplicationTokenCredentials(creds.clientId, creds.domain, creds.secret, 'https://vault.azure.net'));
           console.log(secretsContent.length);
@@ -84,8 +49,7 @@ async function run() {
           for(var s=0;s<secretsContent.length;s++){
             let secret = secretsContent[s];
             let secretResult = await keyvaultClient.setSecret(secret.secret, secret.value);
-            console.log(JSON.stringify(secretResult));
-            console.log("Secret: " + secret.secret + " Created/Updated");
+            console.log("Secret: " + secretResult.name + " Created/Updated");
           }
         } catch (err) {
           tl.setResult(tl.TaskResult.Failed, err.message || 'run() failed');
