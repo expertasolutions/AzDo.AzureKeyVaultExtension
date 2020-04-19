@@ -62,6 +62,7 @@ async function run() {
           let rawdata = fs.readFileSync(secretsFilePath);
           let secretsContent = JSON.parse(rawdata);
 
+          /*
           let getOptions = {
             hostname: keyVault + '.vault.azure.net',
             port: 443,
@@ -73,6 +74,7 @@ async function run() {
           } catch (err) {
             console.log(err);
           }
+          */
 
           const creds = await LoginToAzure(servicePrincipalId, servicePrincipalKey, tenantId);
           const keyvaultCreds = <TokenCredential> <unknown>(new msRestNodeAuth.ApplicationTokenCredentials(creds.clientId, creds.domain, creds.secret, 'https://vault.azure.net'));
