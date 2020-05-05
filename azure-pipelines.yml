@@ -98,6 +98,7 @@ stages:
             
           - task: GitHubRelease@1
             displayName: 'Create Draft Release Note'
+            condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
             inputs:
               gitHubConnection: ExpertaSolutionsGitHub
               tagSource: userSpecifiedTag
