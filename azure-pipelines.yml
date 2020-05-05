@@ -73,3 +73,13 @@ stages:
         deploy:
           steps:
           - script: echo my first deployment
+  - deployment: DeployWeb2
+    pool:
+      vmImage: macOS-latest
+      demands: npm
+    environment: 'testLocal'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - script: echo my first deployment
