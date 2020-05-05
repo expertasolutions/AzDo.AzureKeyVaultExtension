@@ -3,59 +3,60 @@ trigger:
 - master
 - issue*
 
-pool:
-  vmImage: macOS-latest
-  demands: npm
+stages:
+- stage: Build
+  jobs:
+  - job: Build
+    pool:
+      vmImage: macOS-latest
+      demands: npm
+    steps:
+    - task: VersionExtractor@4
+      name: versionExtractor
+      displayName: 'Version extractor digit'
+      inputs:
+        stringToAnalyze: '$(Build.BuildNumber)'
+    - task: TfxInstaller@2
+      displayName: 'Use Node CLI for Azure DevOps (tfx-cli): v0.6.x'
 
-steps:
-- task: VersionExtractor@4
-  name: versionExtractor
-  displayName: 'Version extractor digit'
-  inputs:
-    stringToAnalyze: '$(Build.BuildNumber)'
+    - task: Npm@1
+      displayName: 'TypeScript install'
+      inputs:
+        command: custom
+        workingDir: UploadMultipleAzureKeyVaultSecrets
+        verbose: false
+        customCommand: 'install -g typescript'
 
-- task: TfxInstaller@2
-  displayName: 'Use Node CLI for Azure DevOps (tfx-cli): v0.6.x'
+    - task: Npm@1
+      displayName: 'npm install ManageKeyVaultSecrets'
+      inputs:
+        command: custom
+        workingDir: UploadMultipleAzureKeyVaultSecrets
+        verbose: false
+        customCommand: 'run publishExt'
 
-- task: Npm@1
-  displayName: 'TypeScript install'
-  inputs:
-    command: custom
-    workingDir: UploadMultipleAzureKeyVaultSecrets
-    verbose: false
-    customCommand: 'install -g typescript'
+    - task: Npm@1
+      displayName: 'npm install ManageKeyVaultSingleSecret'
+      inputs:
+        command: custom
+        workingDir: CreateUpdateKeyVaultSecret
+        verbose: false
+        customCommand: 'run publishExt'
 
-- task: Npm@1
-  displayName: 'npm install ManageKeyVaultSecrets'
-  inputs:
-    command: custom
-    workingDir: UploadMultipleAzureKeyVaultSecrets
-    verbose: false
-    customCommand: 'run publishExt'
+    - task: PackageAzureDevOpsExtension@2
+      displayName: 'Package Extension: '
+      inputs:
+        extensionVersion: '$(versionExtractor.fullVersion)'
+        updateTasksVersion: true
 
-- task: Npm@1
-  displayName: 'npm install ManageKeyVaultSingleSecret'
-  inputs:
-    command: custom
-    workingDir: CreateUpdateKeyVaultSecret
-    verbose: false
-    customCommand: 'run publishExt'
+    - task: CopyFiles@2
+      displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
+      inputs:
+        SourceFolder: '$(Build.SourcesDirectory)'
+        Contents: |
+          *.vsix
+          CurrentReleaseNotes.md
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
-- task: PackageAzureDevOpsExtension@2
-  displayName: 'Package Extension: '
-  inputs:
-    extensionVersion: '$(versionExtractor.fullVersion)'
-    updateTasksVersion: true
-
-- task: CopyFiles@2
-  displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
-  inputs:
-    SourceFolder: '$(Build.SourcesDirectory)'
-    Contents: |
-      *.vsix
-      CurrentReleaseNotes.md
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
-
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact: drop'
-
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact: drop'
