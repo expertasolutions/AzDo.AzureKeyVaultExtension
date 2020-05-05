@@ -108,7 +108,7 @@ stages:
               addChangeLog: false
 
 - stage: ExpertaPrivate
-  condition:  and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+  condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
   jobs:
   - deployment: DeployExtension
     pool:
