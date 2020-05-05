@@ -94,6 +94,16 @@ stages:
               extensionVisibility: private
               extensionPricing: free
               shareWith: experta
+          - task: GitHubRelease@1
+            displayName: 'Update Draft to Pre-Release notes'
+            inputs:
+              gitHubConnection: ExpertaSolutionsGitHub
+              action: edit
+              tag: '$(build.fullVersion)'
+              title: '$(build.fullVersion)'
+              releaseNotesFilePath: '$(System.DefaultWorkingDirectory)/_CD-GitHub-AzureKeyVaultExtension/drop/CurrentReleaseNotes.md'
+              isPreRelease: true
+              addChangeLog: false
 
 - stage: Private
   jobs:
