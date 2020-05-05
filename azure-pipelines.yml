@@ -89,7 +89,11 @@ stages:
       runOnce:
         deploy:
           steps:
-          - script: echo my first deployment
+          - task: VersionExtractor@4
+            name: versionExtractor
+            displayName: 'Version extractor digit'
+            inputs:
+              stringToAnalyze: '$(Build.BuildNumber)'
 
 - stage: PublicMarketplace
   jobs:
@@ -102,4 +106,8 @@ stages:
       runOnce:
         deploy:
           steps:
-          - script: echo my first deployment
+          - task: VersionExtractor@4
+            name: versionExtractor
+            displayName: 'Version extractor digit'
+            inputs:
+              stringToAnalyze: '$(Build.BuildNumber)'
