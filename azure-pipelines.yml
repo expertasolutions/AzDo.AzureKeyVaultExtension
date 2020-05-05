@@ -63,7 +63,7 @@ stages:
 
 - stage: PrivatePreview
   jobs:
-  - deployment: DeployWeb
+  - deployment: 'Deploy Extension'
     pool:
       vmImage: macOS-latest
       demands: npm
