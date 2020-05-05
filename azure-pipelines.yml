@@ -60,3 +60,16 @@ stages:
 
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Artifact: drop'
+
+- stage: Deploy
+  jobs:
+  - job: Deploy
+    pool:
+      vmImage: macOS-latest
+      demands: npm
+    environment: 'testLocal'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - script: echo my first deployment
