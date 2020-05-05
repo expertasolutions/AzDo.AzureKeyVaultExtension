@@ -124,7 +124,30 @@ stages:
           - task: TfxInstaller@2
             inputs:
               version: 'v0.6.x'
-            
+          - task: PublishAzureDevOpsExtension@2
+            displayName: 'Publish Extension'
+            inputs:
+              connectedServiceName: 'ExpertaSolutions Marketplace (Community)'
+              fileType: vsix
+              vsixFile: '$(System.DefaultWorkingDirectory)/_CD-GitHub-AzureKeyVaultExtension/drop/expertaPreview.ExpertaAzureKeyVaultExtension-*.vsix'
+              publisherId: ExpertaPreview
+              extensionId: privateAzureKeyVault
+              extensionName: 'Private - Experta AzureKeyVault'
+              updateTasksVersion: false
+              updateTasksId: true
+              extensionVisibility: private
+              extensionPricing: free
+              shareWith: experta
+          - task: GitHubRelease@1
+            displayName: 'Update Draft to Pre-Release notes'
+            inputs:
+              gitHubConnection: ExpertaSolutionsGitHub
+              action: edit
+              tag: '$(build.fullVersion)'
+              title: '$(build.fullVersion)'
+              releaseNotesFilePath: '$(System.DefaultWorkingDirectory)/_CD-GitHub-AzureKeyVaultExtension/drop/CurrentReleaseNotes.md'
+              isPreRelease: true
+              addChangeLog: false
 
 - stage: PublicMarketplace
   jobs:
