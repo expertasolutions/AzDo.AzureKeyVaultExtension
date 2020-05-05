@@ -63,7 +63,7 @@ stages:
 
 - stage: Deploy
   jobs:
-  - job: Deploy
+  - deployment: DeployWeb
     pool:
       vmImage: macOS-latest
       demands: npm
