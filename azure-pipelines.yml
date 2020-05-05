@@ -61,7 +61,7 @@ stages:
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Artifact: drop'
 
-- stage: PrivatePreview
+- stage: ExpertaPrivatePreview
   jobs:
   - deployment: DeployExtension
     pool:
@@ -85,7 +85,7 @@ stages:
             inputs:
               connectedServiceName: 'ExpertaSolutions Marketplace (Community)'
               fileType: vsix
-              vsixFile: 'drop/expertaPreview.ExpertaAzureKeyVaultExtension-*.vsix'
+              vsixFile: '$(Pipeline.Workspace)/drop/expertaPreview.ExpertaAzureKeyVaultExtension-*.vsix'
               publisherId: ExpertaPreview
               extensionId: privateAzureKeyVault
               extensionName: 'Private - Experta AzureKeyVault'
@@ -105,7 +105,7 @@ stages:
               isPreRelease: true
               addChangeLog: false
 
-- stage: Private
+- stage: ExpertaPrivate
   jobs:
   - deployment: DeployExtension
     pool:
@@ -149,7 +149,7 @@ stages:
               isPreRelease: true
               addChangeLog: false
 
-- stage: PublicMarketplace
+- stage: ExpertaPublicMarketplace
   jobs:
   - deployment: DeployExtension
     pool:
