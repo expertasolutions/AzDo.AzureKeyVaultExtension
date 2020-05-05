@@ -73,7 +73,7 @@ stages:
         deploy:
           steps:
           - task: VersionExtractor@4
-            name: versionExtractor
+            name: build
             displayName: 'Version extractor digit'
             inputs:
               stringToAnalyze: '$(Build.BuildNumber)'
@@ -117,7 +117,7 @@ stages:
         deploy:
           steps:
           - task: VersionExtractor@4
-            name: versionExtractor
+            name: build
             displayName: 'Version extractor digit'
             inputs:
               stringToAnalyze: '$(Build.BuildNumber)'
@@ -138,7 +138,7 @@ stages:
         deploy:
           steps:
           - task: VersionExtractor@4
-            name: versionExtractor
+            name: build
             displayName: 'Version extractor digit'
             inputs:
               stringToAnalyze: '$(Build.BuildNumber)'
