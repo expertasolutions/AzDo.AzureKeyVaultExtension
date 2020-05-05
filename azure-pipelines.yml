@@ -85,7 +85,7 @@ stages:
             inputs:
               connectedServiceName: 'ExpertaSolutions Marketplace (Community)'
               fileType: vsix
-              vsixFile: '$(System.DefaultWorkingDirectory)/expertaPreview.ExpertaAzureKeyVaultExtension-*.vsix'
+              vsixFile: '$(System.DefaultWorkingDirectory)/drop/expertaPreview.ExpertaAzureKeyVaultExtension-*.vsix'
               publisherId: ExpertaPreview
               extensionId: privateAzureKeyVault
               extensionName: 'Private - Experta AzureKeyVault'
