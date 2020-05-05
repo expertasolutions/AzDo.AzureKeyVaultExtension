@@ -72,11 +72,28 @@ stages:
       runOnce:
         deploy:
           steps:
-           - task: VersionExtractor@4
-             name: versionExtractor
-             displayName: 'Version extractor digit'
-             inputs:
-               stringToAnalyze: '$(Build.BuildNumber)'
+          - task: VersionExtractor@4
+            name: versionExtractor
+            displayName: 'Version extractor digit'
+            inputs:
+              stringToAnalyze: '$(Build.BuildNumber)'
+          - task: TfxInstaller@2
+            inputs:
+              version: 'v0.6.x'
+          - task: PublishAzureDevOpsExtension@2
+            displayName: 'Publish Extension'
+            inputs:
+              connectedServiceName: 'ExpertaSolutions Marketplace (Community)'
+              fileType: vsix
+              vsixFile: '$(System.DefaultWorkingDirectory)/_CD-GitHub-AzureKeyVaultExtension/drop/expertaPreview.ExpertaAzureKeyVaultExtension-*.vsix'
+              publisherId: ExpertaPreview
+              extensionId: privateAzureKeyVault
+              extensionName: 'Private - Experta AzureKeyVault'
+              updateTasksVersion: false
+              updateTasksId: true
+              extensionVisibility: private
+              extensionPricing: free
+              shareWith: experta
 
 - stage: Private
   jobs:
@@ -94,6 +111,10 @@ stages:
             displayName: 'Version extractor digit'
             inputs:
               stringToAnalyze: '$(Build.BuildNumber)'
+          - task: TfxInstaller@2
+            inputs:
+              version: 'v0.6.x'
+            
 
 - stage: PublicMarketplace
   jobs:
@@ -111,3 +132,6 @@ stages:
             displayName: 'Version extractor digit'
             inputs:
               stringToAnalyze: '$(Build.BuildNumber)'
+          - task: TfxInstaller@2
+            inputs:
+              version: 'v0.6.x'
