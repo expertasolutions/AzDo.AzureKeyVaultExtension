@@ -67,6 +67,7 @@ stages:
     pool:
       vmImage: macOS-latest
       demands: npm
+    environment: 'dev'
     strategy:
       runOnce:
         deploy:
@@ -79,6 +80,7 @@ stages:
     pool:
       vmImage: macOS-latest
       demands: npm
+    environment: 'qa'
     strategy:
       runOnce:
         deploy:
