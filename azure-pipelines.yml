@@ -132,7 +132,7 @@ stages:
             inputs:
               connectedServiceName: 'ExpertaSolutions Marketplace (Community)'
               fileType: vsix
-              vsixFile: '$(System.DefaultWorkingDirectory)/drop/expertaPreview.ExpertaAzureKeyVaultExtension-*.vsix'
+              vsixFile: '$(Pipeline.Workspace)/drop/expertaPreview.ExpertaAzureKeyVaultExtension-*.vsix'
               publisherId: ExpertaPreview
               extensionId: privateAzureKeyVault
               extensionName: 'Private - Experta AzureKeyVault'
@@ -148,7 +148,7 @@ stages:
               action: edit
               tag: '$(build.fullVersion)'
               title: '$(build.fullVersion)'
-              releaseNotesFilePath: '$(System.DefaultWorkingDirectory)/_CD-GitHub-AzureKeyVaultExtension/drop/CurrentReleaseNotes.md'
+              releaseNotesFilePath: '$(Pipeline.Workspace)/_CD-GitHub-AzureKeyVaultExtension/drop/CurrentReleaseNotes.md'
               isPreRelease: true
               addChangeLog: false
 
