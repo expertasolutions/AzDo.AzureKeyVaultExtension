@@ -63,7 +63,7 @@ stages:
 
 - stage: PrivatePreview
   jobs:
-  - deployment: 'Deploy Extension'
+  - deployment: DeployExtension
     pool:
       vmImage: macOS-latest
       demands: npm
@@ -107,7 +107,7 @@ stages:
 
 - stage: Private
   jobs:
-  - deployment: DeployWeb
+  - deployment: DeployExtension
     pool:
       vmImage: macOS-latest
       demands: npm
@@ -151,7 +151,7 @@ stages:
 
 - stage: PublicMarketplace
   jobs:
-  - deployment: DeployWeb
+  - deployment: DeployExtension
     pool:
       vmImage: macOS-latest
       demands: npm
