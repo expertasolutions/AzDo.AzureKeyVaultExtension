@@ -1,9 +1,7 @@
 ## Related Issues
 
-- ### [Issue0016](https://github.com/expertasolutions/AzureKeyVaultExtension/issues/16)
+- ### [Issue0016](https://github.com/expertasolutions/AzureKeyVaultExtension/issues/18)
 
-  - Add the Release notes support for GitHub release to the VisualStudio Marketplace page
+  ![Issue0016](_ReleaseNotes/Issue0018/Issue0018-01.png)
 
-    ![Issue0016](_ReleaseNotes/Issue0016/Issue0016-01.png)
-
-  - Add output when secret is created/updated from 'UploadMultipleAzureKeyVaultSecrets' task
+  - Convert Classic Release Pipeline to CI/CD Yaml Pipeline
