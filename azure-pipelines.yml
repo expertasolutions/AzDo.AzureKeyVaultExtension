@@ -101,7 +101,7 @@ stages:
               action: edit
               tag: '$(build.fullVersion)'
               title: '$(build.fullVersion)'
-              releaseNotesFilePath: '$(System.DefaultWorkingDirectory)/drop/CurrentReleaseNotes.md'
+              releaseNotesFilePath: '$(Pipeline.Workspace)/drop/CurrentReleaseNotes.md'
               isPreRelease: true
               addChangeLog: false
 
