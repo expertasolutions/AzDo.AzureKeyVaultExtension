@@ -61,7 +61,7 @@ stages:
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Artifact: drop'
 
-- stage: Deploy
+- stage: Dev
   jobs:
   - deployment: DeployWeb
     pool:
@@ -84,7 +84,7 @@ stages:
           steps:
           - script: echo my first deployment
 
-- stage: Deploy2
+- stage: QA
   jobs:
   - deployment: DeployWeb
     pool:
