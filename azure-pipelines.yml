@@ -61,7 +61,7 @@ stages:
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Artifact: drop'
 
-- stage: Dev
+- stage: 'Private Preview'
   jobs:
   - deployment: DeployWeb
     pool:
@@ -74,7 +74,20 @@ stages:
           steps:
           - script: echo my first deployment
 
-- stage: QA
+- stage: 'Private'
+  jobs:
+  - deployment: DeployWeb
+    pool:
+      vmImage: macOS-latest
+      demands: npm
+    environment: 'qa'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - script: echo my first deployment
+
+- stage: 'Public Marketplace'
   jobs:
   - deployment: DeployWeb
     pool:
