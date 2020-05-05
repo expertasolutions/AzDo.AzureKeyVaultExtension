@@ -87,7 +87,7 @@ stages:
           steps:
           - script: echo my first deployment
 
-- stage: Public Marketplace
+- stage: PublicMarketplace
   jobs:
   - deployment: DeployWeb
     pool:
