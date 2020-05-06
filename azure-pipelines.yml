@@ -3,59 +3,191 @@ trigger:
 - master
 - issue*
 
-pool:
-  vmImage: macOS-latest
-  demands: npm
+stages:
+- stage: Build
+  jobs:
+  - job: Build
+    pool:
+      vmImage: macOS-latest
+      demands: npm
+    steps:
+    - task: VersionExtractor@4
+      name: versionExtractor
+      displayName: 'Version extractor digit'
+      inputs:
+        stringToAnalyze: '$(Build.BuildNumber)'
+    - task: TfxInstaller@2
+      displayName: 'Use Node CLI for Azure DevOps (tfx-cli): v0.6.x'
 
-steps:
-- task: VersionExtractor@4
-  name: versionExtractor
-  displayName: 'Version extractor digit'
-  inputs:
-    stringToAnalyze: '$(Build.BuildNumber)'
+    - task: Npm@1
+      displayName: 'TypeScript install'
+      inputs:
+        command: custom
+        workingDir: UploadMultipleAzureKeyVaultSecrets
+        verbose: false
+        customCommand: 'install -g typescript'
 
-- task: TfxInstaller@2
-  displayName: 'Use Node CLI for Azure DevOps (tfx-cli): v0.6.x'
+    - task: Npm@1
+      displayName: 'npm install ManageKeyVaultSecrets'
+      inputs:
+        command: custom
+        workingDir: UploadMultipleAzureKeyVaultSecrets
+        verbose: false
+        customCommand: 'run publishExt'
 
-- task: Npm@1
-  displayName: 'TypeScript install'
-  inputs:
-    command: custom
-    workingDir: UploadMultipleAzureKeyVaultSecrets
-    verbose: false
-    customCommand: 'install -g typescript'
+    - task: Npm@1
+      displayName: 'npm install ManageKeyVaultSingleSecret'
+      inputs:
+        command: custom
+        workingDir: CreateUpdateKeyVaultSecret
+        verbose: false
+        customCommand: 'run publishExt'
 
-- task: Npm@1
-  displayName: 'npm install ManageKeyVaultSecrets'
-  inputs:
-    command: custom
-    workingDir: UploadMultipleAzureKeyVaultSecrets
-    verbose: false
-    customCommand: 'run publishExt'
+    - task: PackageAzureDevOpsExtension@2
+      displayName: 'Package Extension: '
+      inputs:
+        extensionVersion: '$(versionExtractor.fullVersion)'
+        updateTasksVersion: true
 
-- task: Npm@1
-  displayName: 'npm install ManageKeyVaultSingleSecret'
-  inputs:
-    command: custom
-    workingDir: CreateUpdateKeyVaultSecret
-    verbose: false
-    customCommand: 'run publishExt'
+    - task: CopyFiles@2
+      displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
+      inputs:
+        SourceFolder: '$(Build.SourcesDirectory)'
+        Contents: |
+          *.vsix
+          CurrentReleaseNotes.md
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
-- task: PackageAzureDevOpsExtension@2
-  displayName: 'Package Extension: '
-  inputs:
-    extensionVersion: '$(versionExtractor.fullVersion)'
-    updateTasksVersion: true
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact: drop'
 
-- task: CopyFiles@2
-  displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
-  inputs:
-    SourceFolder: '$(Build.SourcesDirectory)'
-    Contents: |
-      *.vsix
-      CurrentReleaseNotes.md
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+- stage: ExpertaPrivatePreview
+  jobs:
+  - deployment: DeployExtension
+    pool:
+      vmImage: macOS-latest
+      demands: npm
+    environment: ExpertaPrivatePreview
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: VersionExtractor@4
+            name: build
+            displayName: 'Version extractor digit'
+            inputs:
+              stringToAnalyze: '$(Build.BuildNumber)'
+          - task: TfxInstaller@2
+            inputs:
+              version: 'v0.6.x'
+              
+          - task: PublishAzureDevOpsExtension@2
+            displayName: 'Publish Extension'
+            inputs:
+              connectedServiceName: 'ExpertaSolutions Marketplace (Community)'
+              fileType: vsix
+              vsixFile: '$(Pipeline.Workspace)/drop/expertaPreview.ExpertaAzureKeyVaultExtension-*.vsix'
+              publisherId: ExpertaPreview
+              extensionId: pvprAzureKeyVault
+              extensionName: 'Private Preview - Experta AzureKeyVault'
+              updateTasksVersion: false
+              updateTasksId: true
+              extensionVisibility: privatepreview
+              extensionPricing: free
+              shareWith: experta
+            
+          - task: GitHubRelease@1
+            displayName: 'Create Draft Release Note'
+            condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+            inputs:
+              gitHubConnection: ExpertaSolutionsGitHub
+              tagSource: userSpecifiedTag
+              tag: '$(build.fullVersion)'
+              title: '$(build.fullVersion)'
+              releaseNotesFilePath: '$(Pipeline.Workspace)/drop/CurrentReleaseNotes.md'
+              isDraft: true
+              addChangeLog: false
 
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact: drop'
+- stage: ExpertaPrivate
+  condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+  jobs:
+  - deployment: DeployExtension
+    pool:
+      vmImage: macOS-latest
+      demands: npm
+    environment: ExpertaPrivate
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: VersionExtractor@4
+            name: build
+            displayName: 'Version extractor digit'
+            inputs:
+              stringToAnalyze: '$(Build.BuildNumber)'
+          - task: TfxInstaller@2
+            inputs:
+              version: 'v0.6.x'
+          - task: PublishAzureDevOpsExtension@2
+            displayName: 'Publish Extension'
+            inputs:
+              connectedServiceName: 'ExpertaSolutions Marketplace (Community)'
+              fileType: vsix
+              vsixFile: '$(Pipeline.Workspace)/drop/expertaPreview.ExpertaAzureKeyVaultExtension-*.vsix'
+              publisherId: ExpertaPreview
+              extensionId: privateAzureKeyVault
+              extensionName: 'Private - Experta AzureKeyVault'
+              updateTasksVersion: false
+              updateTasksId: true
+              extensionVisibility: private
+              extensionPricing: free
+              shareWith: experta
+          - task: GitHubRelease@1
+            displayName: 'Update Draft to Pre-Release notes'
+            inputs:
+              gitHubConnection: ExpertaSolutionsGitHub
+              action: edit
+              tag: '$(build.fullVersion)'
+              title: '$(build.fullVersion)'
+              releaseNotesFilePath: '$(Pipeline.Workspace)/drop/CurrentReleaseNotes.md'
+              isPreRelease: true
+              addChangeLog: false
 
+- stage: ExpertaPublicMarketplace
+  jobs:
+  - deployment: DeployExtension
+    pool:
+      vmImage: macOS-latest
+      demands: npm
+    environment: ExpertaPublicMarketplace
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: VersionExtractor@4
+            name: build
+            displayName: 'Version extractor digit'
+            inputs:
+              stringToAnalyze: '$(Build.BuildNumber)'
+          - task: TfxInstaller@2
+            inputs:
+              version: 'v0.6.x'
+          - task: PublishAzureDevOpsExtension@2
+            displayName: 'Publish Extension'
+            inputs:
+              connectedServiceName: 'ExpertaSolutions Marketplace (Community)'
+              fileType: vsix
+              vsixFile: '$(Pipeline.Workspace)/drop/expertaPreview.ExpertaAzureKeyVaultExtension-*.vsix'
+              publisherId: experta
+              updateTasksVersion: false
+              extensionVisibility: public
+              extensionPricing: free
+          - task: GitHubRelease@1
+            displayName: 'Update Pre-Release to Release notes'
+            inputs:
+              gitHubConnection: ExpertaSolutionsGitHub
+              action: edit
+              tag: '$(build.fullVersion)'
+              title: '$(build.fullVersion)'
+              releaseNotesFilePath: '$(Pipeline.Workspace)/drop/CurrentReleaseNotes.md'
+              addChangeLog: false
