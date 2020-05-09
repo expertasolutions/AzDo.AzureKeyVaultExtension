@@ -68,14 +68,17 @@ async function run() {
             }
           }
 
+          console.log("tags count: " + elms.length);
+
           const keyvaultClient = new msKeyVault.SecretClient(url, keyvaultCreds);
-          console.log("after keyvaultclient");
           for(var s=0;s<secretsContent.length;s++){
             let secret = secretsContent[s];
             let secretResult = undefined;
             if(elms.length > 0) {
+              console.log("with tags");
               secretResult = await keyvaultClient.setSecret(secret.secret, secret.value, secretOptions);
             } else {
+              console.log("no tags");
               secretResult = await keyvaultClient.setSecret(secret.secret, secret.value);
             }
             console.log("Secret: " + secretResult.name + " Created/Updated");
