@@ -46,8 +46,7 @@ async function run() {
 
           let secretOptions: msKeyVault.SetSecretOptions = { 
             tags: {
-              "env":"dev",
-              "project": "test"
+              "env":"dev"
             }
           }
 
