@@ -19,6 +19,11 @@ async function run() {
     let resourceGroupName = tl.getInput("resourceGroupName", true) as string;
     let keyVault = tl.getInput("keyVaultName", true) as string;
     let secretsFilePath = tl.getInput("secretsFilePath", true) as string;
+
+    let tagsList = tl.getInput("tagsList", false) as string;
+    if(tagsList === undefined) {
+      tagsList = "";
+    }
     
     console.log("Azure Subscription Id: " + subcriptionId);
     console.log("ServicePrincipalId: " + servicePrincipalId);
@@ -27,6 +32,7 @@ async function run() {
     console.log("Resource Group: " + resourceGroupName);
     console.log("Key Vault: " + keyVault);
     console.log("Secret File Path: '" + secretsFilePath + "'");
+    console.log("tagsList: " + tagsList);
     console.log("");
 
     const url = 'https://' + keyVault + '.vault.azure.net';

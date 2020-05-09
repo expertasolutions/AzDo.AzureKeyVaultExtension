@@ -20,6 +20,11 @@ async function run() {
     let keyVault = tl.getInput("keyVaultName", true) as string;
     let secretName = tl.getInput("secretName", true) as string;
     let secretValue = tl.getInput("secretValue", true) as string;
+
+    let tagsList = tl.getInput("tagsList", false) as string;
+    if(tagsList === undefined) {
+      tagsList = "";
+    }
     
     console.log("Azure Subscription Id: " + subcriptionId);
     console.log("ServicePrincipalId: " + servicePrincipalId);
@@ -28,6 +33,7 @@ async function run() {
     console.log("Resource Group: " + resourceGroupName);
     console.log("Key Vault: " + keyVault);
     console.log("SecretName: " + secretName);
+    console.log("tagsList: " + tagsList);
     
     console.log("");
 
