@@ -55,7 +55,7 @@ async function run() {
     }
 
     let secretOptions: msKeyVault.SetSecretOptions = {};
-    if(elms.length > 0) {
+    if(tagsList.length > 0) {
       let tagsElement = JSON.parse("{" + mdString + "}");
       secretOptions.tags = { 
         tags: tagsElement
@@ -63,7 +63,7 @@ async function run() {
     }
 
     let secretResult = undefined;
-    if(elms.length > 0) {
+    if(tagsList.length > 0) {
       secretResult = await keyvaultClient.setSecret(secretName, secretValue, secretOptions);
     } else {
       secretResult = await keyvaultClient.setSecret(secretName, secretValue);
