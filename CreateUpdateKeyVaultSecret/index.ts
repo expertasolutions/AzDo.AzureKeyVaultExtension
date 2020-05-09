@@ -54,13 +54,12 @@ async function run() {
       }
     }
 
-    if(mdString === undefined) {
-      mdString = "";
-    }
-    let tagsElement = JSON.parse("{" + mdString + "}");
-
-    let secretOptions: msKeyVault.SetSecretOptions = { 
-      tags: tagsElement
+    let secretOptions: msKeyVault.SetSecretOptions = {};
+    if(mdString !== undefined) {
+      let tagsElement = JSON.parse("{" + mdString + "}");
+      secretOptions.tags = { 
+        tags: tagsElement
+      }
     }
 
     let secretResult = await keyvaultClient.setSecret(secretName, secretValue, secretOptions);
