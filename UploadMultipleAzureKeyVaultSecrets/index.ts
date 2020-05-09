@@ -53,32 +53,30 @@ async function run() {
           let mdString = undefined;
           for(let i=0;i<elms.length;i++) {
             let keyValue = elms[i].split('=');
-            if(mdString === undefined) {
-              mdString = "\"" + keyValue[0] + "\":\"" + keyValue[1] + "\"";
-            } else {
-              mdString += ",\"" + keyValue[0] + "\":\"" + keyValue[1] + "\"";
+            if(keyValue.length > 1) {
+              if(mdString === undefined) {
+                mdString = "\"" + keyValue[0] + "\":\"" + keyValue[1] + "\"";
+              } else {
+                mdString += ",\"" + keyValue[0] + "\":\"" + keyValue[1] + "\"";
+              }
             }
           }
 
           let secretOptions: msKeyVault.SetSecretOptions = {};
-          if(tagsList.length > 0) {
+          if(mdString !== undefined) {
             let tagsElement = JSON.parse("{" + mdString + "}");
             secretOptions.tags = { 
               tags: tagsElement
             }
           }
 
-          console.log("tags count: " + elms.length);
-
           const keyvaultClient = new msKeyVault.SecretClient(url, keyvaultCreds);
           for(var s=0;s<secretsContent.length;s++){
             let secret = secretsContent[s];
             let secretResult = undefined;
-            if(tagsList.length > 0) {
-              console.log("with tags");
+            if(mdString !== undefined) {
               secretResult = await keyvaultClient.setSecret(secret.secret, secret.value, secretOptions);
             } else {
-              console.log("no tags");
               secretResult = await keyvaultClient.setSecret(secret.secret, secret.value);
             }
             console.log("Secret: " + secretResult.name + " Created/Updated");

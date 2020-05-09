@@ -47,15 +47,17 @@ async function run() {
     let mdString = undefined;
     for(let i=0;i<elms.length;i++) {
       let keyValue = elms[i].split('=');
-      if(mdString === undefined) {
-        mdString = "\"" + keyValue[0] + "\":\"" + keyValue[1] + "\"";
-      } else {
-        mdString += ",\"" + keyValue[0] + "\":\"" + keyValue[1] + "\"";
+      if(keyValue.length > 1) {
+        if(mdString === undefined) {
+          mdString = "\"" + keyValue[0] + "\":\"" + keyValue[1] + "\"";
+        } else {
+          mdString += ",\"" + keyValue[0] + "\":\"" + keyValue[1] + "\"";
+        }
       }
     }
 
     let secretOptions: msKeyVault.SetSecretOptions = {};
-    if(tagsList.length > 0) {
+    if(mdString !== undefined) {
       let tagsElement = JSON.parse("{" + mdString + "}");
       secretOptions.tags = { 
         tags: tagsElement
@@ -63,7 +65,7 @@ async function run() {
     }
 
     let secretResult = undefined;
-    if(tagsList.length > 0) {
+    if(mdString !== undefined) {
       secretResult = await keyvaultClient.setSecret(secretName, secretValue, secretOptions);
     } else {
       secretResult = await keyvaultClient.setSecret(secretName, secretValue);
