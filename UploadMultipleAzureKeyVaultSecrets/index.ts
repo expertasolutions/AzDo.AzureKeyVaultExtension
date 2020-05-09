@@ -49,10 +49,24 @@ async function run() {
           const creds = await LoginToAzure(servicePrincipalId, servicePrincipalKey, tenantId);
           const keyvaultCreds = <TokenCredential> <unknown>(new msRestNodeAuth.ApplicationTokenCredentials(creds.clientId, creds.domain, creds.secret, 'https://vault.azure.net'));
 
-          let secretOptions: msKeyVault.SetSecretOptions = { 
-            tags: {
-              //"env":"dev"
+          let elms = tagsList.split(';');
+          let mdString = undefined;
+          for(let i=0;i<elms.length;i++) {
+            let keyValue = elms[i].split('=');
+            if(mdString === undefined) {
+              mdString = "\"" + keyValue[0] + "\":\"" + keyValue[1] + "\"";
+            } else {
+              mdString += ",\"" + keyValue[0] + "\":\"" + keyValue[1] + "\"";
             }
+          }
+
+          if(mdString === undefined) {
+            mdString = "";
+          }
+          let tagsElement = JSON.parse("{" + mdString + "}");
+
+          let secretOptions: msKeyVault.SetSecretOptions = { 
+            tags: tagsElement
           }
 
           const keyvaultClient = new msKeyVault.SecretClient(url, keyvaultCreds);
