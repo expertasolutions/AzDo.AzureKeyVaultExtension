@@ -62,7 +62,13 @@ async function run() {
       }
     }
 
-    let secretResult = await keyvaultClient.setSecret(secretName, secretValue, secretOptions);
+    let secretResult = undefined;
+    if(mdString !== undefined) {
+      secretResult = await keyvaultClient.setSecret(secretName, secretValue, secretOptions);
+    } else {
+      secretResult = await keyvaultClient.setSecret(secretName, secretValue);
+    }
+
     console.log(secretResult.name + " set in KeyVault");
   
   } catch (err) {
