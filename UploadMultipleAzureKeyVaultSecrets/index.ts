@@ -42,7 +42,6 @@ async function run() {
 
           const creds = await LoginToAzure(servicePrincipalId, servicePrincipalKey, tenantId);
           const keyvaultCreds = <TokenCredential> <unknown>(new msRestNodeAuth.ApplicationTokenCredentials(creds.clientId, creds.domain, creds.secret, 'https://vault.azure.net'));
-          console.log(secretsContent.length);
 
           let secretOptions: msKeyVault.SetSecretOptions = { 
             tags: {
