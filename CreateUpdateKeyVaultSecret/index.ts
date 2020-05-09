@@ -37,7 +37,14 @@ async function run() {
     const keyvaultCreds = <TokenCredential> <unknown>(new msRestNodeAuth.ApplicationTokenCredentials(creds.clientId, creds.domain, creds.secret, 'https://vault.azure.net'));
     const keyvaultClient = new msKeyVault.SecretClient(url, keyvaultCreds);
 
-    let secretResult = await keyvaultClient.setSecret(secretName, secretValue);
+    let secretOptions: msKeyVault.SetSecretOptions = { 
+      tags: {
+        "env":"dev",
+        "project": "test"
+      }
+    }
+
+    let secretResult = await keyvaultClient.setSecret(secretName, secretValue, secretOptions);
     console.log(secretResult.name + " set in KeyVault");
   
   } catch (err) {
