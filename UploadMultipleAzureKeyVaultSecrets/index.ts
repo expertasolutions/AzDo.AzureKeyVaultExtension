@@ -65,9 +65,7 @@ async function run() {
           let secretOptions: msKeyVault.SetSecretOptions = {};
           if(mdString !== undefined) {
             let tagsElement = JSON.parse("{" + mdString + "}");
-            secretOptions.tags = { 
-              tags: tagsElement
-            }
+            secretOptions.tags = tagsElement;
           }
 
           const keyvaultClient = new msKeyVault.SecretClient(url, keyvaultCreds);
