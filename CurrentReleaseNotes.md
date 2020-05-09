@@ -1,5 +1,5 @@
 ## Related Issues
 
-- ### [Issue0018](https://github.com/expertasolutions/AzureKeyVaultExtension/issues/18)
+- ### [Issue0008](https://github.com/expertasolutions/AzureKeyVaultExtension/issues/8)
 
-  - Convert Classic Release Pipeline to CI/CD Yaml Pipeline
+  - Add the capability to 'tags' secrets
