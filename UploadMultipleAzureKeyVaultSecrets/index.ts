@@ -19,6 +19,11 @@ async function run() {
     let resourceGroupName = tl.getInput("resourceGroupName", true) as string;
     let keyVault = tl.getInput("keyVaultName", true) as string;
     let secretsFilePath = tl.getInput("secretsFilePath", true) as string;
+
+    let tagsList = tl.getInput("tagsList", false) as string;
+    if(tagsList === undefined) {
+      tagsList = "";
+    }
     
     console.log("Azure Subscription Id: " + subcriptionId);
     console.log("ServicePrincipalId: " + servicePrincipalId);
@@ -27,6 +32,7 @@ async function run() {
     console.log("Resource Group: " + resourceGroupName);
     console.log("Key Vault: " + keyVault);
     console.log("Secret File Path: '" + secretsFilePath + "'");
+    console.log("tagsList: " + tagsList);
     console.log("");
 
     const url = 'https://' + keyVault + '.vault.azure.net';
@@ -42,12 +48,35 @@ async function run() {
 
           const creds = await LoginToAzure(servicePrincipalId, servicePrincipalKey, tenantId);
           const keyvaultCreds = <TokenCredential> <unknown>(new msRestNodeAuth.ApplicationTokenCredentials(creds.clientId, creds.domain, creds.secret, 'https://vault.azure.net'));
-          console.log(secretsContent.length);
+
+          let elms = tagsList.split(';');
+          let mdString = undefined;
+          for(let i=0;i<elms.length;i++) {
+            let keyValue = elms[i].split('=');
+            if(keyValue.length > 1) {
+              if(mdString === undefined) {
+                mdString = "\"" + keyValue[0] + "\":\"" + keyValue[1] + "\"";
+              } else {
+                mdString += ",\"" + keyValue[0] + "\":\"" + keyValue[1] + "\"";
+              }
+            }
+          }
+
+          let secretOptions: msKeyVault.SetSecretOptions = {};
+          if(mdString !== undefined) {
+            let tagsElement = JSON.parse("{" + mdString + "}");
+            secretOptions.tags = tagsElement;
+          }
+
           const keyvaultClient = new msKeyVault.SecretClient(url, keyvaultCreds);
-          console.log("after keyvaultclient");
           for(var s=0;s<secretsContent.length;s++){
             let secret = secretsContent[s];
-            let secretResult = await keyvaultClient.setSecret(secret.secret, secret.value);
+            let secretResult = undefined;
+            if(mdString !== undefined) {
+              secretResult = await keyvaultClient.setSecret(secret.secret, secret.value, secretOptions);
+            } else {
+              secretResult = await keyvaultClient.setSecret(secret.secret, secret.value);
+            }
             console.log("Secret: " + secretResult.name + " Created/Updated");
           }
         } catch (err) {

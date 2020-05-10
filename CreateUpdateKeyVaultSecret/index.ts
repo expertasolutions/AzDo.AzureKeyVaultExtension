@@ -20,6 +20,11 @@ async function run() {
     let keyVault = tl.getInput("keyVaultName", true) as string;
     let secretName = tl.getInput("secretName", true) as string;
     let secretValue = tl.getInput("secretValue", true) as string;
+
+    let tagsList = tl.getInput("tagsList", false) as string;
+    if(tagsList === undefined) {
+      tagsList = "";
+    }
     
     console.log("Azure Subscription Id: " + subcriptionId);
     console.log("ServicePrincipalId: " + servicePrincipalId);
@@ -28,6 +33,7 @@ async function run() {
     console.log("Resource Group: " + resourceGroupName);
     console.log("Key Vault: " + keyVault);
     console.log("SecretName: " + secretName);
+    console.log("tagsList: " + tagsList);
     
     console.log("");
 
@@ -37,7 +43,32 @@ async function run() {
     const keyvaultCreds = <TokenCredential> <unknown>(new msRestNodeAuth.ApplicationTokenCredentials(creds.clientId, creds.domain, creds.secret, 'https://vault.azure.net'));
     const keyvaultClient = new msKeyVault.SecretClient(url, keyvaultCreds);
 
-    let secretResult = await keyvaultClient.setSecret(secretName, secretValue);
+    let elms = tagsList.split(';');
+    let mdString = undefined;
+    for(let i=0;i<elms.length;i++) {
+      let keyValue = elms[i].split('=');
+      if(keyValue.length > 1) {
+        if(mdString === undefined) {
+          mdString = "\"" + keyValue[0] + "\":\"" + keyValue[1] + "\"";
+        } else {
+          mdString += ",\"" + keyValue[0] + "\":\"" + keyValue[1] + "\"";
+        }
+      }
+    }
+
+    let secretOptions: msKeyVault.SetSecretOptions = {};
+    if(mdString !== undefined) {
+      let tagsElement = JSON.parse("{" + mdString + "}");
+      secretOptions.tags = tagsElement;
+    }
+
+    let secretResult = undefined;
+    if(mdString !== undefined) {
+      secretResult = await keyvaultClient.setSecret(secretName, secretValue, secretOptions);
+    } else {
+      secretResult = await keyvaultClient.setSecret(secretName, secretValue);
+    }
+
     console.log(secretResult.name + " set in KeyVault");
   
   } catch (err) {
